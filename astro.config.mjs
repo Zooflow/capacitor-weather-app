@@ -3,8 +3,12 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'http://localhost:4321',
+    site: "https://capacitor-weather-app.vercel.app",
     vite: {
-    plugins: [tailwindcss()],
-  },
+      plugins: [tailwindcss()],
+      assetsInclude: ['**/*.svg'],
+      build: {
+        assetsInlineLimit: 0
+      }
+    },
 });

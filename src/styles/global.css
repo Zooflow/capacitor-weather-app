@@ -1,1 +1,303 @@
-@import "tailwindcss";
+@import "tailwindcss/preflight";
+@tailwind utilities;
+
+@theme {
+    --cozy-primary: #f8e4dd;
+    --cozy-secondary: #e8c1b4;
+    --cozy-accent: #d6a692;
+    --cozy-dark: #9a6b5c;
+    --cozy-text: #5c4842;
+    --good-quality: #7fd8a1;
+    --moderate-quality: #ffda85;
+    --poor-quality: #ff9785;
+    --color-bermuda: #78dcca;
+  }
+
+:root {
+    --cozy-primary: #f8e4dd;
+    --cozy-secondary: #e8c1b4;
+    --cozy-accent: #d6a692;
+    --cozy-dark: #9a6b5c;
+    --cozy-text: #5c4842;
+    --good-quality: #7fd8a1;
+    --moderate-quality: #ffda85;
+    --poor-quality: #ff9785;
+    --cozy-shadow: 0 4px 15px rgba(156, 109, 93, 0.2);
+    --cozy-shadow-hover: 0 6px 22px rgba(156, 109, 93, 0.3);
+  }
+  
+  body {
+    background-color: #f9f2ed;
+    color: var(--cozy-text);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .cozy-main {
+    min-height: 100vh;
+    padding: 1.5rem;
+    background-image: url('/images/cozy-background.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+  }
+  
+  .cozy-container {
+    background-color: rgba(255, 250, 245, 0.85);
+    border-radius: 24px;
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: var(--cozy-shadow);
+    backdrop-filter: blur(5px);
+  }
+  
+  .cozy-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .cozy-header h1 {
+    color: var(--cozy-dark);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .love-message {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--cozy-accent);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    display: inline-block;
+  }
+  
+  .cozy-loading {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid var(--cozy-primary);
+    border-bottom-color: var(--cozy-accent);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+  
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .cozy-weather-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .gif-container {
+    width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--cozy-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .gif-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--cozy-shadow-hover);
+  }
+  
+  .weather-gif {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 18px;
+  }
+  
+  .cozy-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--cozy-shadow);
+    width: 100%;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+  }
+  
+  .cozy-card:hover {
+    box-shadow: var(--cozy-shadow-hover);
+  }
+  
+  .cozy-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .temp-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--cozy-dark);
+    margin-bottom: 0.25rem;
+  }
+  
+  .weather-desc {
+    font-size: 1.2rem;
+    color: var(--cozy-text);
+    margin-bottom: 1.5rem;
+  }
+  
+  .cozy-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .cozy-detail {
+    background-color: var(--cozy-primary);
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .cozy-detail:hover {
+    background-color: var(--cozy-secondary);
+    transform: translateY(-3px);
+  }
+  
+  .detail-title {
+    font-size: 0.85rem;
+    color: var(--cozy-dark);
+    margin-bottom: 0.5rem;
+  }
+  
+  .detail-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cozy-text);
+  }
+  
+  .air-quality {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .air-quality-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  
+  .cozy-forecast-title {
+    margin: 1.5rem 0 1rem;
+    text-align: center;
+    color: var(--cozy-dark);
+    font-size: 1.5rem;
+  }
+  
+  .cozy-forecast {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .forecast-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 18px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: var(--cozy-shadow);
+    transition: all 0.2s ease;
+  }
+  
+  .forecast-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--cozy-shadow-hover);
+  }
+  
+  .forecast-date {
+    font-size: 0.9rem;
+    color: var(--cozy-accent);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .forecast-temp {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--cozy-dark);
+    margin: 0.5rem 0;
+  }
+  
+  /* Mejoras para los iconos del pronóstico */
+  .forecast-icon-container {
+    width: 75px;
+    height: 75px;
+    margin: 0.5rem auto;
+    background-color: rgba(248, 228, 221, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(156, 109, 93, 0.3);
+  }
+  
+  .forecast-icon {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+  }
+  
+  .cozy-error {
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(255, 235, 235, 0.9);
+    border-radius: 18px;
+    color: #d75a5a;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .cozy-container {
+      padding: 1.5rem;
+      border-radius: 18px;
+    }
+    
+    .cozy-header h1 {
+      font-size: 1.8rem;
+    }
+    
+    .cozy-details {
+      grid-template-columns: 1fr;
+    }
+    
+    .weather-gif {
+      height: 200px;
+    }
+    
+    .forecast-icon-container {
+      width: 65px;
+      height: 65px;
+    }
+    
+    .forecast-icon {
+      width: 50px;
+      height: 50px;
+    }
+  }
