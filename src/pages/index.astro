@@ -103,307 +103,310 @@ import "../styles/global.css";
 
 <script>
   document.addEventListener('DOMContentLoaded', async () => {
-    const loadingElement = document.getElementById('loading');
-    const weatherContent = document.getElementById('weather-content');
-    const forecastContainer = document.getElementById('forecast-container');
-    const errorMessage = document.getElementById('error-message');
-    const weatherGif = document.getElementById('weather-gif');
-    const loveMessage = document.getElementById('love-message');
-    
-    // Array of love messages to display randomly
-    const loveMessages = [
-      "No hay pronóstico que prediga lo mucho que te amo, porque mi amor por ti es infinito ❤️",
-      "Eres mi rayo de sol en los días lluviosos ☀️",
-      "Contigo, cada día es un clima perfecto 💕",
-      "Te amo mucho mi osita hermosa 🐻‍❄️",
-      "Eres el calor que necesito en los días fríos ☃️",
-      "Como el clima, eres hermosa en todas tus formas 💖",
-      "No importa el clima, el día es mejor cuando pienso en ti 🥰",
-      "En cada amanecer mi primer pensamiento eres tu 💌",
-      "Eres la luz que ilumina mis días oscuros 🌅"
-    ];
-    
-    // Set random love message
-    loveMessage.textContent = loveMessages[Math.floor(Math.random() * loveMessages.length)];
-    
-    // GIF mapping for weather conditions
-    const weatherGifs = {
-      // Soleado
-      '01d': 'public/images/weather/sunny-cozy.gif',
-      // Noche despejada
-      '01n': 'public/images/weather/clear-night-cozy.gif',
-      // Parcialmente nublado día
-      '02d': 'public/images/weather/partly-cloudy-day-cozy.gif',
-      // Parcialmente nublado noche
-      '02n': 'public/images/weather/partly-cloudy-night-cozy.gif',
-      // Nublado
-      '03d': 'public/images/icons/cloudy-cozy.gif',
-      '03n': 'public/images/icons/cloudy-night-cozy.gif',
-      '04d': 'public/images/icons/very-cloudy-cozy.gif',
-      '04n': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-      // Lluvia ligera
-      '09d': '/images/weather/light-rain-cozy.gif',
-      '09n': '/images/weather/light-rain-night-cozy.gif',
-      // Lluvia
-      '10d': '/images/weather/rain-cozy.gif',
-      '10n': '/images/weather/rain-night-cozy.gif',
-      // Tormenta
-      '11d': '/images/weather/thunderstorm-cozy.gif',
-      '11n': '/images/weather/thunderstorm-night-cozy.gif',
-      // Nieve
-      '13d': '/images/weather/snow-cozy.gif',
-      '13n': '/images/weather/snow-night-cozy.gif',
-      // Niebla
-      '50d': '/images/weather/fog-cozy.gif',
-      '50n': '/images/weather/fog-night-cozy.gif',
-      // Default
-      'default': '/images/weather/default-cozy.gif'
-    };
-    
-    // Mapa de iconos personalizados para el pronóstico
-    const customIcons = {
-      '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
-      '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
-      '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
-      '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
-      '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-      '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
-      '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-      '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
-      '09d': 'https://i.gifer.com/10LH.gif',
-      '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
-      '10d': 'https://i.gifer.com/10LH.gif',
-      '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
-      '11d': 'public/images/icons/thunderstorm.png',
-      '11n': 'public/images/icons/thunderstorm-night.png',
-      '13d': 'public/images/icons/snow.png',
-      '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
-      '50d': 'public/images/icons/mist.png',
-      '50n': 'public/images/icons/mist-night.png'
-    };
-    
-    // Función para obtener icono personalizado o fallback a OpenWeatherMap
-    function getWeatherIconUrl(iconCode) {
-      if (customIcons[iconCode]) {
-        return customIcons[iconCode];
-      } else {
-        return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      }
-    }
-    
-    try {
-      // Fetch weather data from the API endpoint
-      const timestamp = new Date().getTime(); // Genera un número único para evitar caché
-      const response = await fetch(`/api/weather?nocache=${timestamp}`);
-      // Check if the request was successful
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      
-      const weatherData = await response.json();
-      
-      // Fetch air quality data (mocked - replace with your API)
-      const airQualityValue = getRandomAirQuality();
-      
-      // Update current weather
-      updateCurrentWeather(weatherData.list[0], airQualityValue);
-      
-      // Update weather GIF based on condition
-      updateWeatherGif(weatherData.list[0].weather[0].icon);
-      
-      // Process forecast data to get one entry per day
-      const dailyForecast = processDailyForecast(weatherData.list);
-      
-      // Create and append forecast items
-      createForecastElements(dailyForecast);
-      
-      // Hide loading message and show weather content
-      loadingElement.style.display = 'none';
-      weatherContent.style.display = 'block';
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-      
-      // Hide loading message and show error
-      loadingElement.style.display = 'none';
-      errorMessage.style.display = 'block';
-    }
-  });
+  const loadingElement = document.getElementById('loading');
+  const weatherContent = document.getElementById('weather-content');
+  const forecastContainer = document.getElementById('forecast-container');
+  const errorMessage = document.getElementById('error-message');
+  const weatherGif = document.getElementById('weather-gif');
+  const loveMessage = document.getElementById('love-message');
   
-  function getRandomAirQuality() {
-    // Mock function - replace with actual air quality API
-    const values = ["Bueno", "Moderado", "Poco saludable"];
-    const randomIndex = Math.floor(Math.random() * values.length);
-    return values[randomIndex];
-  }
+  // Array of love messages to display randomly
+  const loveMessages = [
+    "No hay pronóstico que prediga lo mucho que te amo, porque mi amor por ti es infinito ❤️",
+    "Eres mi rayo de sol en los días lluviosos ☀️",
+    "Contigo, cada día es un clima perfecto 💕",
+    "Te amo mucho mi osita hermosa 🐻‍❄️",
+    "Eres el calor que necesito en los días fríos ☃️",
+    "Como el clima, eres hermosa en todas tus formas 💖",
+    "No importa el clima, el día es mejor cuando pienso en ti 🥰",
+    "En cada amanecer mi primer pensamiento eres tu 💌",
+    "Eres la luz que ilumina mis días oscuros 🌅"
+  ];
   
-  function updateCurrentWeather(currentData, airQualityValue) {
-    // Update current temperature and description
-    document.getElementById('current-temp').textContent = `${Math.round(currentData.main.temp)}°C`;
-    document.getElementById('weather-desc').textContent = capitalizeFirstLetter(currentData.weather[0].description);
-    document.getElementById('feels-like').textContent = `${Math.round(currentData.main.feels_like)}°C`;
-    document.getElementById('humidity').textContent = `${currentData.main.humidity}%`;
-    document.getElementById('wind-speed').textContent = `${Math.round(currentData.wind.speed * 3.6)} km/h`; // Convert m/s to km/h
-    
-    // Update air quality
-    document.getElementById('air-quality').textContent = airQualityValue;
-    const airQualityDot = document.getElementById('air-quality-dot');
-    
-    // Set air quality color
-    if (airQualityValue === "Bueno") {
-      airQualityDot.style.backgroundColor = "var(--good-quality)";
-    } else if (airQualityValue === "Moderado") {
-      airQualityDot.style.backgroundColor = "var(--moderate-quality)";
+  // Set random love message
+  loveMessage.textContent = loveMessages[Math.floor(Math.random() * loveMessages.length)];
+  
+  // GIF mapping for weather conditions
+  const weatherGifs = {
+    // Soleado
+    '01d': 'public/images/weather/sunny-cozy.gif',
+    // Noche despejada
+    '01n': 'public/images/weather/clear-night-cozy.gif',
+    // Parcialmente nublado día
+    '02d': 'public/images/weather/partly-cloudy-day-cozy.gif',
+    // Parcialmente nublado noche
+    '02n': 'public/images/weather/partly-cloudy-night-cozy.gif',
+    // Nublado
+    '03d': 'public/images/icons/cloudy-cozy.gif',
+    '03n': 'public/images/icons/cloudy-night-cozy.gif',
+    '04d': 'public/images/icons/very-cloudy-cozy.gif',
+    '04n': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+    // Lluvia ligera
+    '09d': '/images/weather/light-rain-cozy.gif',
+    '09n': '/images/weather/light-rain-night-cozy.gif',
+    // Lluvia
+    '10d': '/images/weather/rain-cozy.gif',
+    '10n': '/images/weather/rain-night-cozy.gif',
+    // Tormenta
+    '11d': '/images/weather/thunderstorm-cozy.gif',
+    '11n': '/images/weather/thunderstorm-night-cozy.gif',
+    // Nieve
+    '13d': '/images/weather/snow-cozy.gif',
+    '13n': '/images/weather/snow-night-cozy.gif',
+    // Niebla
+    '50d': '/images/weather/fog-cozy.gif',
+    '50n': '/images/weather/fog-night-cozy.gif',
+    // Default
+    'default': '/images/weather/default-cozy.gif'
+  };
+  
+  // Mapa de iconos personalizados para el pronóstico
+  const customIcons = {
+    '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+    '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+    '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+    '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+    '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+    '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+    '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+    '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+    '09d': 'https://i.gifer.com/10LH.gif',
+    '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+    '10d': 'https://i.gifer.com/10LH.gif',
+    '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+    '11d': 'public/images/icons/thunderstorm.png',
+    '11n': 'public/images/icons/thunderstorm-night.png',
+    '13d': 'public/images/icons/snow.png',
+    '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
+    '50d': 'public/images/icons/mist.png',
+    '50n': 'public/images/icons/mist-night.png'
+  };
+  
+  // Función para obtener icono personalizado o fallback a OpenWeatherMap
+  function getWeatherIconUrl(iconCode) {
+    if (customIcons[iconCode]) {
+      return customIcons[iconCode];
     } else {
-      airQualityDot.style.backgroundColor = "var(--poor-quality)";
+      return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    }
+  }
+  
+  try {
+    // Fetch weather data from the API endpoint
+    const timestamp = new Date().getTime(); // Genera un número único para evitar caché
+    const response = await fetch(`/api/weather?nocache=${timestamp}`);
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
     
-    // Update weather icon
-    updateWeatherIcon(currentData.weather[0].icon);
-  }
-  
-  function updateWeatherIcon(iconCode) {
-    const iconElement = document.getElementById('weather-icon');
-    const iconMap = {
-      '01d': '☀️',
-      '01n': '🌙',
-      '02d': '⛅',
-      '02n': '☁️',
-      '03d': '☁️',
-      '03n': '☁️',
-      '04d': '☁️',
-      '04n': '☁️',
-      '09d': '🌧️',
-      '09n': '🌧️',
-      '10d': '🌦️',
-      '10n': '🌧️',
-      '11d': '⛈️',
-      '11n': '⛈️',
-      '13d': '❄️',
-      '13n': '❄️',
-      '50d': '🌫️',
-      '50n': '🌫️'
-    };
+    const weatherData = await response.json();
     
-    iconElement.textContent = iconMap[iconCode] || '☀️';
-  }
-  
-  function updateWeatherGif(iconCode) {
-    const weatherGif = document.getElementById('weather-gif');
-    const weatherGifs = {
-      '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
-      '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
-      '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
-      '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
-      '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-      '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
-      '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-      '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
-      '09d': 'https://i.gifer.com/10LH.gif',
-      '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
-      '10d': 'https://i.gifer.com/10LH.gif',
-      '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
-      '11d': 'public/images/icons/thunderstorm.png',
-      '11n': 'public/images/icons/thunderstorm-night.png',
-      '13d': 'public/images/icons/snow.png',
-      '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
-      '50d': 'public/images/icons/mist.png',
-      '50n': 'public/images/icons/mist-night.png',
-      'default': 'public/images/weather/default-cozy.gif'
-    };
+    // Fetch air quality data from OpenWeatherMap API
+    const airQualityResponse = await fetch(`/api/air-quality?nocache=${timestamp}`);
+    let airQualityValue = "No disponible";
+    let airQualityIndex = 0;
     
-    // Set the appropriate GIF based on weather condition
-    weatherGif.src = weatherGifs[iconCode] || weatherGifs['default'];
-    weatherGif.alt = `Clima ${iconCode}`;
-  }
-  
-  // Process forecast data to get one entry per day
-  function processDailyForecast(forecastList) {
-    const dailyData = [];
-    const processedDates = new Set();
-    
-    for (const item of forecastList) {
-      const date = new Date(item.dt * 1000);
-      const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    if (airQualityResponse.ok) {
+      const airQualityData = await airQualityResponse.json();
       
-      // Only take the first forecast for each day
-      if (!processedDates.has(dateString)) {
-        processedDates.add(dateString);
-        dailyData.push(item);
+      // Get AQI from the response
+      if (airQualityData && airQualityData.list && airQualityData.list[0]) {
+        airQualityIndex = airQualityData.list[0].main.aqi;
         
-        // Stop after we have 5 days
-        if (dailyData.length >= 5) {
-          break;
+        // Map AQI values (1-5) to descriptive text
+        switch(airQualityIndex) {
+          case 1:
+            airQualityValue = "Bueno";
+            break;
+          case 2:
+            airQualityValue = "Moderado";
+            break;
+          case 3:
+            airQualityValue = "Poco saludable";
+            break;
+          case 4:
+            airQualityValue = "Insalubre";
+            break;
+          case 5:
+            airQualityValue = "Muy insalubre";
+            break;
+          default:
+            airQualityValue = "No disponible";
         }
       }
     }
     
-    return dailyData;
-  }
-  
-  function createForecastElements(forecast) {
-    const forecastContainer = document.getElementById('forecast-container');
-    forecastContainer.innerHTML = ''; // Clear existing forecast elements
+    // Update current weather
+    updateCurrentWeather(weatherData.list[0], airQualityValue);
     
-    forecast.forEach((day) => {
-      const date = new Date(day.dt * 1000);
-      const dayOfWeek = getDayOfWeek(date);
-      const formattedDate = formatDate(date);
-      const iconCode = day.weather[0].icon;
-      
-      const forecastItem = document.createElement('div');
-      forecastItem.className = 'forecast-item';
-      
-      // Uso de iconos personalizados o fallback a OpenWeatherMap
-      const iconUrl = customIcons[iconCode] || `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      
-      forecastItem.innerHTML = `
-        <div class="forecast-date">${dayOfWeek}</div>
-        <div class="forecast-date">${formattedDate}</div>
-        <div class="forecast-icon-container">
-          <img src="${iconUrl}" alt="${day.weather[0].description}" class="forecast-icon">
-        </div>
-        <div class="forecast-temp">${Math.round(day.main.temp)}°C</div>
-        <div>${capitalizeFirstLetter(day.weather[0].description)}</div>
-      `;
-      
-      forecastContainer.appendChild(forecastItem);
-    });
+    // Update weather GIF based on condition
+    updateWeatherGif(weatherData.list[0].weather[0].icon);
+    
+    // Process forecast data to get one entry per day
+    const dailyForecast = processDailyForecast(weatherData.list);
+    
+    // Create and append forecast items
+    createForecastElements(dailyForecast);
+    
+    // Hide loading message and show weather content
+    loadingElement.style.display = 'none';
+    weatherContent.style.display = 'block';
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    
+    // Hide loading message and show error
+    loadingElement.style.display = 'none';
+    errorMessage.style.display = 'block';
+  }
+});
+
+function updateCurrentWeather(currentData, airQualityValue) {
+  // Update current temperature and description
+  document.getElementById('current-temp').textContent = `${Math.round(currentData.main.temp)}°C`;
+  document.getElementById('weather-desc').textContent = capitalizeFirstLetter(currentData.weather[0].description);
+  document.getElementById('feels-like').textContent = `${Math.round(currentData.main.feels_like)}°C`;
+  document.getElementById('humidity').textContent = `${currentData.main.humidity}%`;
+  document.getElementById('wind-speed').textContent = `${Math.round(currentData.wind.speed * 3.6)} km/h`; // Convert m/s to km/h
+  
+  // Update air quality
+  document.getElementById('air-quality').textContent = airQualityValue;
+  const airQualityDot = document.getElementById('air-quality-dot');
+  
+  // Set air quality color
+  if (airQualityValue === "Bueno") {
+    airQualityDot.style.backgroundColor = "var(--good-quality)";
+  } else if (airQualityValue === "Moderado") {
+    airQualityDot.style.backgroundColor = "var(--moderate-quality)";
+  } else {
+    airQualityDot.style.backgroundColor = "var(--poor-quality)";
   }
   
-  // Mapa de iconos personalizados para el pronóstico
-  const customIcons = {
-    '01d': 'images/icons/01d.svg',
-    '01n': 'images/icons/01n.svg',
-    '02d': 'images/icons/02d.svg',
-    '02n': 'images/icons/02n.svg',
-    '03d': 'images/icons/03d.svg',
-    '03n': 'images/icons/03n.svg',
-    '04d': 'images/icons/04d.svg',
-    '04n': 'images/icons/04n.svg',
-    '09d': 'images/icons/09d.svg',
-    '09n': 'images/icons/09n.svg',
-    '10d': 'images/icons/10d.svg',
-    '10n': 'images/icons/10n.svg',
-    '11d': 'images/icons/11d.svg',
-    '11n': 'images/icons/11n.svg',
-    '13d': 'images/icons/13d.svg',
-    '13n': 'images/icons/13n.svg',
-    '50d': 'images/icons/50d.svg',
-    '50n': 'images/icons/50n.svg'
+  // Update weather icon
+  updateWeatherIcon(currentData.weather[0].icon);
+}
+
+function updateWeatherIcon(iconCode) {
+  const iconElement = document.getElementById('weather-icon');
+  const iconMap = {
+    '01d': '☀️',
+    '01n': '🌙',
+    '02d': '⛅',
+    '02n': '☁️',
+    '03d': '☁️',
+    '03n': '☁️',
+    '04d': '☁️',
+    '04n': '☁️',
+    '09d': '🌧️',
+    '09n': '🌧️',
+    '10d': '🌦️',
+    '10n': '🌧️',
+    '11d': '⛈️',
+    '11n': '⛈️',
+    '13d': '❄️',
+    '13n': '❄️',
+    '50d': '🌫️',
+    '50n': '🌫️'
   };
   
-  function getDayOfWeek(date) {
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    return days[date.getDay()];
+  iconElement.textContent = iconMap[iconCode] || '☀️';
+}
+
+function updateWeatherGif(iconCode) {
+  const weatherGif = document.getElementById('weather-gif');
+  const weatherGifs = {
+    '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+    '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+    '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+    '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+    '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+    '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+    '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+    '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+    '09d': 'https://i.gifer.com/10LH.gif',
+    '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+    '10d': 'https://i.gifer.com/10LH.gif',
+    '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+    '11d': 'public/images/icons/thunderstorm.png',
+    '11n': 'public/images/icons/thunderstorm-night.png',
+    '13d': 'public/images/icons/snow.png',
+    '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
+    '50d': 'public/images/icons/mist.png',
+    '50n': 'public/images/icons/mist-night.png',
+    'default': 'public/images/weather/default-cozy.gif'
+  };
+  
+  // Set the appropriate GIF based on weather condition
+  weatherGif.src = weatherGifs[iconCode] || weatherGifs['default'];
+  weatherGif.alt = `Clima ${iconCode}`;
+}
+
+// Process forecast data to get one entry per day
+function processDailyForecast(forecastList) {
+  const dailyData = [];
+  const processedDates = new Set();
+  
+  for (const item of forecastList) {
+    const date = new Date(item.dt * 1000);
+    const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    
+    // Only take the first forecast for each day
+    if (!processedDates.has(dateString)) {
+      processedDates.add(dateString);
+      dailyData.push(item);
+      
+      // Stop after we have 5 days
+      if (dailyData.length >= 5) {
+        break;
+      }
+    }
   }
   
-  function formatDate(date) {
-    return `${date.getDate()}/${date.getMonth() + 1}`;
-  }
+  return dailyData;
+}
+
+function createForecastElements(forecast) {
+  const forecastContainer = document.getElementById('forecast-container');
+  forecastContainer.innerHTML = ''; // Clear existing forecast elements
   
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  forecast.forEach((day) => {
+    const date = new Date(day.dt * 1000);
+    const dayOfWeek = getDayOfWeek(date);
+    const formattedDate = formatDate(date);
+    const iconCode = day.weather[0].icon;
+    
+    const forecastItem = document.createElement('div');
+    forecastItem.className = 'forecast-item';
+    
+    // Uso de iconos personalizados o fallback a OpenWeatherMap
+    const iconUrl = customIcons[iconCode] || `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    
+    forecastItem.innerHTML = `
+      <div class="forecast-date">${dayOfWeek}</div>
+      <div class="forecast-date">${formattedDate}</div>
+      <div class="forecast-icon-container">
+        <img src="${iconUrl}" alt="${day.weather[0].description}" class="forecast-icon">
+      </div>
+      <div class="forecast-temp">${Math.round(day.main.temp)}°C</div>
+      <div>${capitalizeFirstLetter(day.weather[0].description)}</div>
+    `;
+    
+    forecastContainer.appendChild(forecastItem);
+  });
+}
+
+function getDayOfWeek(date) {
+  const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  return days[date.getDay()];
+}
+
+function formatDate(date) {
+  return `${date.getDate()}/${date.getMonth() + 1}`;
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 
 
