@@ -126,71 +126,6 @@ import "../styles/global.css";
   // Set random love message
   loveMessage.textContent = loveMessages[Math.floor(Math.random() * loveMessages.length)];
   
-  // GIF mapping for weather conditions
-  const weatherGifs = {
-    // Soleado
-    '01d': 'public/images/weather/sunny-cozy.gif',
-    // Noche despejada
-    '01n': 'public/images/weather/clear-night-cozy.gif',
-    // Parcialmente nublado día
-    '02d': 'public/images/weather/partly-cloudy-day-cozy.gif',
-    // Parcialmente nublado noche
-    '02n': 'public/images/weather/partly-cloudy-night-cozy.gif',
-    // Nublado
-    '03d': 'public/images/icons/cloudy-cozy.gif',
-    '03n': 'public/images/icons/cloudy-night-cozy.gif',
-    '04d': 'public/images/icons/very-cloudy-cozy.gif',
-    '04n': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-    // Lluvia ligera
-    '09d': '/images/weather/light-rain-cozy.gif',
-    '09n': '/images/weather/light-rain-night-cozy.gif',
-    // Lluvia
-    '10d': '/images/weather/rain-cozy.gif',
-    '10n': '/images/weather/rain-night-cozy.gif',
-    // Tormenta
-    '11d': '/images/weather/thunderstorm-cozy.gif',
-    '11n': '/images/weather/thunderstorm-night-cozy.gif',
-    // Nieve
-    '13d': '/images/weather/snow-cozy.gif',
-    '13n': '/images/weather/snow-night-cozy.gif',
-    // Niebla
-    '50d': '/images/weather/fog-cozy.gif',
-    '50n': '/images/weather/fog-night-cozy.gif',
-    // Default
-    'default': '/images/weather/default-cozy.gif'
-  };
-  
-  // Mapa de iconos personalizados para el pronóstico
-  const customIcons = {
-    '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
-    '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
-    '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
-    '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
-    '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-    '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
-    '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-    '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
-    '09d': 'https://i.gifer.com/10LH.gif',
-    '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
-    '10d': 'https://i.gifer.com/10LH.gif',
-    '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
-    '11d': 'public/images/icons/thunderstorm.png',
-    '11n': 'public/images/icons/thunderstorm-night.png',
-    '13d': 'public/images/icons/snow.png',
-    '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
-    '50d': 'public/images/icons/mist.png',
-    '50n': 'public/images/icons/mist-night.png'
-  };
-  
-  // Función para obtener icono personalizado o fallback a OpenWeatherMap
-  function getWeatherIconUrl(iconCode) {
-    if (customIcons[iconCode]) {
-      return customIcons[iconCode];
-    } else {
-      return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-    }
-  }
-  
   try {
     // Fetch weather data from the API endpoint
     const timestamp = new Date().getTime(); // Genera un número único para evitar caché
@@ -260,6 +195,37 @@ import "../styles/global.css";
     errorMessage.style.display = 'block';
   }
 });
+
+// Mapa de iconos personalizados para el pronóstico - MOVIDO FUERA DE LA FUNCIÓN PRINCIPAL
+const customIcons = {
+  '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+  '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+  '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+  '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+  '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+  '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+  '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+  '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+  '09d': 'https://i.gifer.com/10LH.gif',
+  '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+  '10d': 'https://i.gifer.com/10LH.gif',
+  '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+  '11d': 'public/images/icons/thunderstorm.png',
+  '11n': 'public/images/icons/thunderstorm-night.png',
+  '13d': 'public/images/icons/snow.png',
+  '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
+  '50d': 'public/images/icons/mist.png',
+  '50n': 'public/images/icons/mist-night.png'
+};
+
+// Función para obtener icono personalizado o fallback a OpenWeatherMap
+function getWeatherIconUrl(iconCode) {
+  if (customIcons[iconCode]) {
+    return customIcons[iconCode];
+  } else {
+    return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  }
+}
 
 function updateCurrentWeather(currentData, airQualityValue) {
   // Update current temperature and description
@@ -410,6 +376,25 @@ function capitalizeFirstLetter(string) {
 
 
 
- 
+  export async function GET() {
+    const API_KEY = import.meta.env.PUBLIC_WEATHER_API_KEY;
+    const city = "Temuco";
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=es`;
+  
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Error al obtener el clima");
+      const data = await response.json();
+  
+      return new Response(JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json", "Cache-Control": "no-store, max-age=0", },
+      });
+    }
+  }
   
 </script>
