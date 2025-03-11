@@ -290,35 +290,24 @@ import "../styles/global.css";
   function updateWeatherGif(iconCode) {
     const weatherGif = document.getElementById('weather-gif');
     const weatherGifs = {
-      // Soleado
-      '01d': 'public/images/icons/sunny-cozy.gif',
-      // Noche despejadaicons
-      '01n': 'public/images/icons/clear-night-cozy.gif',
-      // Parcialmente nubladicons
-      '02d': 'public/images/icons/partly-cloudy-day-cozy.gif',
-      // Parcialmente nubladicons
-      '02n': 'public/images/icons/partly-cloudy-night-cozy.gif',
-      // Nubladoicons
-      '03d': 'public/images/icons/cloudy-cozy.gif',
-      '03n': 'public/images/icons/cloudy-night-cozy.gif',
-      '04d': 'public/images/icons/very-cloudy-cozy.gif',
-      '04n': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
-      // Lluvia ligera
-      '09d': 'public/images/weather/light-rain-cozy.gif',
-      '09n': 'public/images/weather/light-rain-night-cozy.gif',
-      // Lluvia
-      '10d': 'public/images/weather/rain-cozy.gif',
-      '10n': 'public/images/weather/rain-night-cozy.gif',
-      // Tormenta
-      '11d': 'public/images/weather/thunderstorm-cozy.gif',
-      '11n': 'public/images/weather/thunderstorm-night-cozy.gif',
-      // Nieve
-      '13d': 'public/images/weather/snow-cozy.gif',
-      '13n': 'public/images/weather/snow-night-cozy.gif',
-      // Niebla
-      '50d': 'public/images/weather/fog-cozy.gif',
-      '50n': 'public/images/weather/fog-night-cozy.gif',
-      // Default
+      '01d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+      '01n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+      '02d': 'https://i.pinimg.com/originals/99/2c/7d/992c7d9f92a779914ec638fdf3daf4df.gif',
+      '02n': 'https://64.media.tumblr.com/4bbf0eda6e58d5838a321a0a12f4bc60/93b164a2ee50418c-4a/s540x810/a7651f90589d362deea9ea264b56908625584f4f.gif',
+      '03d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+      '03n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+      '04d': 'https://i.pinimg.com/originals/be/09/9d/be099d47486da0906cd8ff960ad6edea.gif',
+      '04n': 'https://i.pinimg.com/originals/4e/3c/3a/4e3c3abef5c8cc641223d8b2950f4a74.gif',
+      '09d': 'https://i.gifer.com/10LH.gif',
+      '09n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+      '10d': 'https://i.gifer.com/10LH.gif',
+      '10n': 'https://i.pinimg.com/originals/7e/0f/89/7e0f897ddfd70e293c103238924d3a0b.gif',
+      '11d': 'public/images/icons/thunderstorm.png',
+      '11n': 'public/images/icons/thunderstorm-night.png',
+      '13d': 'public/images/icons/snow.png',
+      '13n': 'https://i.pinimg.com/originals/6a/26/4f/6a264ffff2b7f7623f13091792611ccf.gif',
+      '50d': 'public/images/icons/mist.png',
+      '50n': 'public/images/icons/mist-night.png',
       'default': 'public/images/weather/default-cozy.gif'
     };
     
