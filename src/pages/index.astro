@@ -211,11 +211,37 @@ import "../styles/global.css";
       // Update weather GIF based on condition
       updateWeatherGif(weatherData.list[0].weather[0].icon);
       
-      // Process forecast data to get one entry per day
-      const dailyForecast = processDailyForecast(weatherData.list);
-      
-      // Create and append forecast items
-      createForecastElements(dailyForecast);
+      function processDailyForecast(forecastList) {
+    const dailyData = {};
+    
+    forecastList.forEach(entry => {
+        const date = new Date(entry.dt * 1000).toISOString().split('T')[0]; // Obtener solo la fecha (YYYY-MM-DD)
+
+        if (!dailyData[date]) {
+            dailyData[date] = {
+                temps: [],
+                icon: entry.weather[0].icon, // Usar el primer icono disponible del día
+                description: entry.weather[0].description // Usar la primera descripción del día
+            };
+        }
+
+        dailyData[date].temps.push(entry.main.temp); // Guardar todas las temperaturas del día
+    });
+
+    // Procesar los datos para obtener una temperatura promedio y crear un array con la información final
+    return Object.keys(dailyData).map(date => {
+        const temps = dailyData[date].temps;
+        const avgTemp = temps.reduce((sum, t) => sum + t, 0) / temps.length; // Promedio de temperatura
+        
+        return {
+            date,
+            temp: Math.round(avgTemp), // Redondear la temperatura promedio
+            icon: dailyData[date].icon,
+            description: dailyData[date].description
+        };
+    });
+}
+
       
       // Hide loading message and show weather content
       loadingElement.style.display = 'none';
