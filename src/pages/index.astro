@@ -111,27 +111,23 @@ async function updateWeather() {
   const loadingElement = document.getElementById('loading');
   const weatherContent = document.getElementById('weather-content');
   const errorMessage = document.getElementById('error-message');
-  const timestamp = new Date().getTime();
   
   try {
     loadingElement.style.display = 'block';
     weatherContent.style.display = 'none';
     errorMessage.style.display = 'none';
-    
-    // Obtén datos reales de OpenWeatherMap desde tu endpoint
-    const response = await fetch(`/api/weather?nocache=${timestamp}`);
+
+    // 🚀 Vuelve a agregar la URL correcta de la API
+    const response = await fetch('https://capacitor-weather-app.vercel.app/api/weather');
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const data = await response.json();
-    if (!data.list) throw new Error("No se encontraron datos del clima");
     
-    // Actualiza el clima actual (tarjeta superior)
+    if (!data.list) throw new Error("No se encontraron datos del clima");
+
     updateCurrentWeather(data.list[0]);
     updateWeatherGif(data.list[0].weather[0].icon);
-    
-    // Procesa el pronóstico agrupando por día
-    const dailyForecast = processDailyForecast(data.list);
-    createForecastElements(dailyForecast);
-    
+    createForecastElements(processDailyForecast(data.list));
+
     loadingElement.style.display = 'none';
     weatherContent.style.display = 'block';
   } catch (error) {
@@ -140,6 +136,7 @@ async function updateWeather() {
     errorMessage.style.display = 'block';
   }
 }
+
 
 function updateCurrentWeather(currentData) {
   document.getElementById('current-temp').textContent = `${Math.round(currentData.main.temp)}°C`;
